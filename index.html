@@ -332,7 +332,7 @@
       <!-- ──外層超連結── -->
       <a href="profile.html" id="nav-avatar" style="display: none; text-decoration: none; align-items: center; gap: 0.5rem;">
       <!-- ── 內層圓形頭像這是一個純 CSS 畫出來的圓形「文字頭像」 ── -->
-        <div style="width: 36px; height: 36px; background: var(--gold); color: var(--white); border-radius: 99px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">明</div>
+        <div id="nav-avatar-icon" style="width: 36px; height: 36px; background: var(--gold); color: var(--white); border-radius: 99px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; overflow: hidden;">明</div>
       </a>
     </div>
   </div>
@@ -733,11 +733,24 @@
   window.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     const loginBtn = document.getElementById('nav-login-btn');
-    const avatar = document.getElementById('nav-avatar');
+    const avatarLink = document.getElementById('nav-avatar');
+    const avatarIcon = document.getElementById('nav-avatar-icon'); // 抓取頭像圖示區塊
     
     if (isLoggedIn === 'true') {
       if (loginBtn) loginBtn.style.display = 'none'; // 隱藏登入按鈕
-      if (avatar) avatar.style.display = 'flex';     // 顯示大頭貼
+      if (avatarLink) avatarLink.style.display = 'flex'; // 顯示大頭貼
+      
+      // ✨ 處理大頭貼圖片與名字 ✨
+      const savedAvatar = localStorage.getItem('userAvatar');
+      const userName = localStorage.getItem('userName') || '明';
+      
+      if (savedAvatar && avatarIcon) {
+        // 如果有上傳圖片，塞入 img 標籤
+        avatarIcon.innerHTML = `<img src="${savedAvatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
+      } else if (avatarIcon) {
+        // 如果沒有圖片，顯示名字的第一個字
+        avatarIcon.textContent = userName.charAt(0);
+      }
     }
   });
 </script>
