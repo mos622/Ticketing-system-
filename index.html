@@ -329,8 +329,11 @@
         搜尋
       </div>
       <a href="login.html" class="btn-login" style="text-decoration: none; display: flex; align-items: center; justify-content:center;">登入</a>
+      <!-- ──外層超連結── -->
       <a href="profile.html" id="nav-avatar" style="display: none; text-decoration: none; align-items: center; gap: 0.5rem;">
+      <!-- ── 內層圓形頭像這是一個純 CSS 畫出來的圓形「文字頭像」 ── -->
         <div style="width: 36px; height: 36px; background: var(--gold); color: var(--white); border-radius: 99px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;">明</div>
+      </a>
     </div>
   </div>
 </nav>
@@ -714,7 +717,7 @@
     <span>服務時間｜週一至週五 09:00–18:00</span>
   </div>
 </footer>
-
+  
 <script>
   // 分類篩選標籤
   document.querySelectorAll('.tag').forEach(tag => {
@@ -722,6 +725,20 @@
       document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
       this.classList.add('active');
     });
+  });
+
+  // ═══════════════════════
+  // ── 檢查登入狀態的邏輯 ──
+  // ═══════════════════════
+  window.addEventListener('DOMContentLoaded', () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const loginBtn = document.getElementById('nav-login-btn');
+    const avatar = document.getElementById('nav-avatar');
+    
+    if (isLoggedIn === 'true') {
+      if (loginBtn) loginBtn.style.display = 'none'; // 隱藏登入按鈕
+      if (avatar) avatar.style.display = 'flex';     // 顯示大頭貼
+    }
   });
 </script>
 
