@@ -385,8 +385,7 @@
   function handleLogout() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userName');
-    localStorage.removeItem('registeredUser'); // 清除註冊資料
-    localStorage.removeItem('userAvatar');     // ✨ 新增這行：清除大頭貼
+
     
     alert('已成功登出');
     window.location.href = 'login.html';
