@@ -235,12 +235,8 @@
     }
     */
   }
-
-  async function handleLogout() {
+  
     // ── 目前：假登出邏輯 ──
-    alert('已成功登出');
-    window.location.href = 'login.html';
-
     /* ── 串接 PHP 後改用這段 ──
     try {
       await fetch(API.logout);
@@ -249,6 +245,17 @@
       window.location.href = 'login.html';
     }
     */
+    
+    async function handleLogout() {
+    // ── 模擬登出：清除瀏覽器的登入紀錄 ──
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userName');
+    
+    alert('已成功登出');
+    window.location.href = 'login.html';
+  }
+
+    
   }
 </script>
 
