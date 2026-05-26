@@ -33,7 +33,7 @@
     }
     .card {
       background: var(--white); border: 1px solid var(--border);
-      border-radius: 12px; padding: 2.5rem; width: 100%; max-width: 420px;
+      border-radius: 12px; padding: 2.5rem; width: 100%; max-width: 520px;
       box-shadow: 0 4px 24px rgba(0,0,0,0.06);
     }
     .tabs {
@@ -46,16 +46,26 @@
       border-bottom: 2px solid transparent; transition: all 0.2s;
     }
     .tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 500; }
+    
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media(max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+    
     .form-group { margin-bottom: 1.25rem; }
     label { display: block; font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 0.4rem; }
-    input {
+    
+    input, select {
       width: 100%; padding: 0.65rem 1rem;
       border: 1px solid var(--border); border-radius: 8px;
       font-size: 0.9rem; font-family: 'Noto Sans TC', sans-serif;
       background: var(--cream); transition: border-color 0.2s;
-      outline: none;
+      outline: none; height: 43px;
     }
-    input:focus { border-color: var(--gold); background: var(--white); }
+    input:focus, select:focus { border-color: var(--gold); background: var(--white); }
+    
     .btn {
       width: 100%; padding: 0.75rem;
       background: var(--gold); color: var(--ink);
@@ -67,11 +77,13 @@
     .btn-outline {
       background: transparent; border: 1px solid var(--border);
       color: var(--ink-muted); margin-top: 0.75rem; font-weight: 400;
+      text-decoration: none; display: block; text-align: center;
     }
     .btn-outline:hover { border-color: var(--ink); color: var(--ink); opacity: 1; }
     .forgot { text-align: right; margin-top: -0.75rem; margin-bottom: 1rem; }
     .forgot a { font-size: 0.78rem; color: var(--gold); text-decoration: none; }
     .forgot a:hover { text-decoration: underline; }
+    
     .msg {
       padding: 0.75rem 1rem; border-radius: 8px;
       font-size: 0.82rem; margin-bottom: 1rem; display: none;
@@ -106,52 +118,105 @@
 <div class="main">
   <div class="card">
 
-    <!-- 分頁標籤 -->
     <div class="tabs">
       <div class="tab active" onclick="switchTab('login')">登入</div>
       <div class="tab" onclick="switchTab('register')">註冊</div>
     </div>
 
-    <!-- 訊息提示 -->
     <div class="msg" id="msg"></div>
 
-    <!-- ── 登入面板 ── -->
     <div class="panel active" id="panel-login">
       <div class="form-group">
-        <label>電子信箱</label>
-        <input type="email" id="login-email" placeholder="請輸入電子信箱" />
+        <label>電子信箱 (Email)</label>
+        <input type="email" id="login-email" placeholder="admin@example.com" />
       </div>
       <div class="form-group">
         <label>密碼</label>
-        <input type="password" id="login-password" placeholder="請輸入密碼" />
+        <input type="password" id="login-password" placeholder="12345678" />
       </div>
       <div class="forgot">
-        <a href="forgot_password.html">忘記密碼？</a>
+        <a href="forgot-password.html">忘記密碼？</a>
       </div>
       <button class="btn" onclick="handleLogin()">登入</button>
       <div class="divider">或</div>
       <button class="btn btn-outline" onclick="switchTab('register')">還沒有帳號？立即註冊</button>
     </div>
 
-    <!-- ── 註冊面板 ── -->
     <div class="panel" id="panel-register">
-      <div class="form-group">
-        <label>姓名</label>
-        <input type="text" id="reg-name" placeholder="請輸入真實姓名" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>會員帳號 (User_ID)</label>
+          <input type="text" id="reg-uid" placeholder="例如：user123" />
+        </div>
+        <div class="form-group">
+          <label>姓名</label>
+          <input type="text" id="reg-name" placeholder="請輸入真實姓名" />
+        </div>
       </div>
-      <div class="form-group">
-        <label>電子信箱</label>
-        <input type="email" id="reg-email" placeholder="請輸入電子信箱" />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>生日</label>
+          <input type="date" id="reg-birthday" />
+        </div>
+        <div class="form-group">
+          <label>性別</label>
+          <select id="reg-gender">
+            <option value="">請選擇</option>
+            <option value="男">男</option>
+            <option value="女">女</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label>密碼</label>
-        <input type="password" id="reg-password" placeholder="至少 8 個字元" />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>手機號碼</label>
+          <input type="tel" id="reg-phone" placeholder="09xxxxxxxx" />
+        </div>
+        <div class="form-group">
+          <label>發票載具編號</label>
+          <input type="text" id="reg-carrier" placeholder="/XXXXXXX" />
+        </div>
       </div>
+
       <div class="form-group">
-        <label>確認密碼</label>
-        <input type="password" id="reg-password2" placeholder="再輸入一次密碼" />
+        <label>電子信箱 (Email)</label>
+        <input type="email" id="reg-email" placeholder="example@mail.com" />
       </div>
-      <button class="btn" onclick="handleRegister()">註冊</button>
+
+      <div class="form-group">
+        <label>身分狀態</label>
+        <select id="reg-identity" onchange="toggleRegisterIdentity()">
+          <option value="一般會員">一般會員</option>
+          <option value="大學生">大學生</option>
+        </select>
+      </div>
+
+      <div id="reg-student-fields" class="form-row" style="display: none;">
+        <div class="form-group">
+          <label>大學校名</label>
+          <input type="text" id="reg-school" placeholder="例如：臺灣大學" />
+        </div>
+        <div class="form-group">
+          <label>學號</label>
+          <input type="text" id="reg-student-id" placeholder="請輸入學號" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>密碼</label>
+          <input type="password" id="reg-password" placeholder="至少 8 個字元" />
+        </div>
+        <div class="form-group">
+          <label>確認密碼</label>
+          <input type="password" id="reg-password2" placeholder="再輸入一次密碼" />
+        </div>
+      </div>
+
+      <button class="btn" onclick="handleRegister()">立即註冊</button>
       <div class="divider">或</div>
       <button class="btn btn-outline" onclick="switchTab('login')">已有帳號？返回登入</button>
     </div>
@@ -163,11 +228,11 @@
 
 <script>
   // ═══════════════════════════════════════════
-  // ★ PHP/MySQL 接口設定區（之後串接時修改這裡）
+  // ★ PHP/MySQL 接口設定區
   // ═══════════════════════════════════════════
   const API = {
-    login:    'api/login.php',       // POST: email, password
-    register: 'api/register.php',    // POST: name, email, password
+    login:    'api/login.php',       
+    register: 'api/register.php',    
   };
   // ═══════════════════════════════════════════
 
@@ -180,6 +245,16 @@
     showMsg('', '');
   }
 
+  function toggleRegisterIdentity() {
+    const identity = document.getElementById('reg-identity').value;
+    const block = document.getElementById('reg-student-fields');
+    if (identity === '大學生') {
+      block.style.display = 'grid';
+    } else {
+      block.style.display = 'none';
+    }
+  }
+
   function showMsg(text, type) {
     const el = document.getElementById('msg');
     el.textContent = text;
@@ -187,82 +262,82 @@
     el.style.display = text ? 'block' : 'none';
   }
 
-  // ── 登入 ──
-      /* ── 串接 PHP 後改用這段 ──
-    try {
-      const res  = await fetch(API.login, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (data.success) {
-        localStorage.setItem('user', JSON.stringify(data.user));
-        window.location.href = 'profile.html';
-      } else {
-        showMsg(data.message || '帳號或密碼錯誤', 'error');
-      }
-    } catch (e) {
-      showMsg('連線失敗，請稍後再試', 'error');
-    }
-    */
-  
+  // ── 登入邏輯 ──
   async function handleLogin() {
     const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
 
     if (!email || !password) { showMsg('請填寫所有欄位', 'error'); return; }
 
-    // ── 模擬前端帳密驗證 ──
-    if (email === 'admin@example.com' && password === '12345678') {
+    // 讀取註冊資料快取
+    const registeredUser = JSON.parse(localStorage.getItem('registeredUser'));
+
+    // 同時支援「新註冊的帳密」與「預設管理員系統帳密」登入
+    const isDefaultAdmin = (email === 'admin@example.com' && password === '12345678');
+    const isNewUser = (registeredUser && email === registeredUser.email && password === registeredUser.password);
+
+    if (isDefaultAdmin || isNewUser) {
       showMsg('登入成功！歡迎回來', 'success');
       
-      // 在瀏覽器記憶體儲存登入狀態
       localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userName', '王小明');
+      // 設定右上角顯示的名字
+      const displayName = isNewUser ? registeredUser.name : '王小明';
+      localStorage.setItem('userName', displayName);
       
-      // 1.2 秒後跳轉回首頁，這時首頁就會看到大頭貼了！
       setTimeout(() => { window.location.href = 'index.html'; }, 1200);
     } else {
-      showMsg('帳號或密碼錯誤（提示：admin@example.com / 12345678）', 'error');
+      showMsg('帳號或密碼錯誤（預設提示：admin@example.com / 12345678）', 'error');
     }
   }
 
-  // ── 註冊 ──
+  // ── 註冊邏輯 ──
   async function handleRegister() {
+    const uid       = document.getElementById('reg-uid').value.trim();
     const name      = document.getElementById('reg-name').value.trim();
+    const birthday  = document.getElementById('reg-birthday').value;
+    const gender    = document.getElementById('reg-gender').value;
+    const phone     = document.getElementById('reg-phone').value.trim();
+    const carrier   = document.getElementById('reg-carrier').value.trim();
     const email     = document.getElementById('reg-email').value.trim();
+    const identity  = document.getElementById('reg-identity').value;
+    const school    = document.getElementById('reg-school').value.trim();
+    const studentId = document.getElementById('reg-student-id').value.trim();
     const password  = document.getElementById('reg-password').value;
     const password2 = document.getElementById('reg-password2').value;
 
-    if (!name || !email || !password || !password2) { showMsg('請填寫所有欄位', 'error'); return; }
+    // 基礎驗證
+    if (!uid || !name || !email || !password || !password2) { showMsg('請填寫必填欄位 (帳號、姓名、Email、密碼)', 'error'); return; }
+    if (identity === '大學生' && (!school || !studentId)) { showMsg('大學生身分請務必填寫校名與學號', 'error'); return; }
     if (password.length < 8) { showMsg('密碼至少需要 8 個字元', 'error'); return; }
     if (password !== password2) { showMsg('兩次密碼輸入不一致', 'error'); return; }
 
-    // ── 目前：假註冊邏輯 ──
-    showMsg('註冊成功！請登入', 'success');
-    setTimeout(() => { switchTab('login'); }, 1500);
+    // ── 模擬將註冊資料封裝至本地快取中 ──
+    const newUser = {
+      uid, name, birthday, gender, phone, carrier, email, identity,
+      school: identity === '大學生' ? school : '',
+      studentId: identity === '大學生' ? studentId : '',
+      password
+    };
+    localStorage.setItem('registeredUser', JSON.stringify(newUser));
+
+    showMsg('註冊成功！請直接在左側登入', 'success');
+    setTimeout(() => { 
+      switchTab('login'); 
+      // 自動幫使用者把剛剛註冊的 Email 填入登入欄位
+      document.getElementById('login-email').value = email;
+    }, 1500);
 
     /* ── 串接 PHP 後改用這段 ──
     try {
       const res  = await fetch(API.register, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ uid, name, birthday, gender, phone, carrier, email, identity, school, studentId, password })
       });
-      const data = await res.json();
-      if (data.success) {
-        showMsg('註冊成功！請登入', 'success');
-        setTimeout(() => { switchTab('login'); }, 1500);
-      } else {
-        showMsg(data.message || '註冊失敗', 'error');
-      }
-    } catch (e) {
-      showMsg('連線失敗，請稍後再試', 'error');
-    }
+      // 處理後端回應...
+    } catch (e) { showMsg('連線失敗', 'error'); }
     */
   }
 </script>
-
 </body>
 </html>
