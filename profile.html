@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>個人資料 － 售票系統</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1a1a; --ink-muted: #555; --ink-light: #888;
+      --gold: #c8973a; --gold-pale: #f5eedc; --cream: #faf8f4;
+      --white: #ffffff; --red: #b93b2a; --border: #e0dbd0;
+    }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--cream); color: var(--ink);
+      min-height: 100vh; display: flex; flex-direction: column;
+    }
+    nav {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      height: 64px; display: flex; align-items: center; padding: 0 2rem;
+    }
+    .nav-inner {
+      max-width: 1280px; margin: auto; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Noto Serif TC', serif; font-size: 1.1rem;
+      font-weight: 700; text-decoration: none; color: var(--ink);
+    }
+    .logo span { color: var(--gold); }
+    
+    .nav-user {
+      font-size: 0.85rem; color: var(--ink-muted);
+      display: flex; gap: 1rem; align-items: center;
+    }
+    .nav-user a { color: var(--ink-muted); text-decoration: none; cursor: pointer; transition: 0.2s;}
+    .nav-user a:hover { color: var(--gold); }
+
+    .main {
+      flex: 1; display: flex; align-items: flex-start;
+      justify-content: center; padding: 3rem 1rem;
+    }
+    .card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2.5rem; width: 100%; max-width: 500px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .card-title {
+      font-family: 'Noto Serif TC', serif; font-size: 1.25rem; font-weight: 700;
+      margin-bottom: 1.5rem; text-align: left; border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+    }
+    .form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    }
+    @media(max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    label { display: block; font-size: 0.8rem; color: var(--ink-muted); margin-bottom: 0.4rem; font-weight: 500; }
+    input {
+      width: 100%; padding: 0.65rem 1rem;
+      border: 1px solid var(--border); border-radius: 8px;
+      font-size: 0.9rem; font-family: 'Noto Sans TC', sans-serif;
+      background: var(--cream); transition: border-color 0.2s;
+      outline: none;
+    }
+    input:focus { border-color: var(--gold); background: var(--white); }
+    input[disabled] { background: #f0f0f0; color: var(--ink-light); cursor: not-allowed; }
+    
+    .btn {
+      width: 100%; padding: 0.75rem;
+      background: var(--gold); color: var(--ink);
+      border: none; border-radius: 8px; font-size: 0.9rem;
+      font-weight: 700; cursor: pointer; font-family: 'Noto Sans TC', sans-serif;
+      transition: opacity 0.2s; margin-top: 1rem;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-danger {
+      background: transparent; color: var(--red); border: 1px solid var(--red);
+      margin-top: 0.75rem; font-weight: 400;
+    }
+    .btn-danger:hover { background: var(--red); color: var(--white); }
+
+    .msg {
+      padding: 0.75rem 1rem; border-radius: 8px;
+      font-size: 0.82rem; margin-bottom: 1rem; display: none;
+    }
+    .msg.success { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+    .msg.error { background: #fce4ec; color: #b93b2a; border: 1px solid #f8bbd0; }
+    
+    .hint { font-size: 0.7rem; color: var(--ink-light); margin-top: 0.3rem; }
+
+    footer {
+      text-align: center; padding: 1.5rem;
+      font-size: 0.75rem; color: var(--ink-light);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html">售票<span>系統</span></a>
+    <div class="nav-user">
+      <span id="nav-user-name">會員您好</span>
+      <a href="index.html">回首頁</a>
+      <a onclick="handleLogout()">登出</a>
+    </div>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="card">
+    <div class="card-title">修改個人資料</div>
+
+    <div class="msg" id="msg"></div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>姓名</label>
+        <input type="text" id="profile-name" placeholder="請輸入姓名" />
+      </div>
+      <div class="form-group">
+        <label>手機號碼</label>
+        <input type="tel" id="profile-phone" placeholder="09xxxxxxxx" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>電子信箱 (帳號)</label>
+      <input type="email" id="profile-email" disabled value="user@example.com" />
+      <div class="hint">註冊信箱無法直接修改，如需變更請聯繫客服。</div>
+    </div>
+
+    <div class="form-group" style="margin-top: 2rem;">
+      <label>新密碼</label>
+      <input type="password" id="profile-password" placeholder="若不修改密碼請留白" />
+    </div>
+    <div class="form-group">
+      <label>確認新密碼</label>
+      <input type="password" id="profile-password-confirm" placeholder="再次輸入新密碼" />
+    </div>
+
+    <button class="btn" onclick="handleUpdateProfile()">儲存修改</button>
+    <button class="btn btn-danger" onclick="handleLogout()">登出帳號</button>
+  </div>
+</div>
+
+<footer>© 2026 售票系統. All rights reserved.</footer>
+
+<script>
+  // ═══════════════════════════════════════════
+  // ★ PHP/MySQL 接口設定區
+  // ═══════════════════════════════════════════
+  const API = {
+    get_profile:    'api/get_profile.php',    // GET: 獲取當前登入者資料
+    update_profile: 'api/update_profile.php', // POST: name, phone, password(可選)
+    logout:         'api/logout.php'          // POST or GET: 清除 session
+  };
+  // ═══════════════════════════════════════════
+
+  // 頁面載入時讀取假資料
+  window.onload = async function() {
+    // ── 目前：假取得資料邏輯 ──
+    document.getElementById('profile-name').value = '王小明';
+    document.getElementById('profile-phone').value = '0912345678';
+    document.getElementById('profile-email').value = 'user@example.com';
+    document.getElementById('nav-user-name').textContent = '王小明 您好';
+
+    /* ── 串接 PHP 後改用這段 ──
+    try {
+      const res = await fetch(API.get_profile);
+      const data = await res.json();
+      if (data.success) {
+        document.getElementById('profile-name').value = data.user.name;
+        document.getElementById('profile-phone').value = data.user.phone || '';
+        document.getElementById('profile-email').value = data.user.email;
+        document.getElementById('nav-user-name').textContent = data.user.name + ' 您好';
+      } else {
+        // 未登入或授權過期，導回登入頁
+        window.location.href = 'login.html';
+      }
+    } catch (e) {
+      console.error('無法載入使用者資料');
+    }
+    */
+  };
+
+  function showMsg(text, type) {
+    const el = document.getElementById('msg');
+    el.textContent = text;
+    el.className = 'msg ' + type;
+    el.style.display = text ? 'block' : 'none';
+  }
+
+  async function handleUpdateProfile() {
+    const name = document.getElementById('profile-name').value.trim();
+    const phone = document.getElementById('profile-phone').value.trim();
+    const password = document.getElementById('profile-password').value;
+    const confirmPassword = document.getElementById('profile-password-confirm').value;
+
+    if (!name) { showMsg('姓名不得為空', 'error'); return; }
+    if (password && password !== confirmPassword) { showMsg('兩次新密碼輸入不一致', 'error'); return; }
+    if (password && password.length < 8) { showMsg('新密碼至少需要 8 個字元', 'error'); return; }
+
+    // ── 目前：假儲存邏輯 ──
+    showMsg('個人資料已成功更新！', 'success');
+    document.getElementById('nav-user-name').textContent = name + ' 您好';
+    document.getElementById('profile-password').value = '';
+    document.getElementById('profile-password-confirm').value = '';
+
+    /* ── 串接 PHP 後改用這段 ──
+    try {
+      const res = await fetch(API.update_profile, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, password }) // email通常不可改，若可改再加入
+      });
+      const data = await res.json();
+      if (data.success) {
+        showMsg('個人資料已成功更新！', 'success');
+        document.getElementById('nav-user-name').textContent = name + ' 您好';
+        document.getElementById('profile-password').value = '';
+        document.getElementById('profile-password-confirm').value = '';
+      } else {
+        showMsg(data.message || '更新失敗', 'error');
+      }
+    } catch (e) {
+      showMsg('連線失敗，請稍後再試', 'error');
+    }
+    */
+  }
+
+  async function handleLogout() {
+    // ── 目前：假登出邏輯 ──
+    alert('已成功登出');
+    window.location.href = 'login.html';
+
+    /* ── 串接 PHP 後改用這段 ──
+    try {
+      await fetch(API.logout);
+      window.location.href = 'login.html';
+    } catch (e) {
+      window.location.href = 'login.html';
+    }
+    */
+  }
+</script>
+
+</body>
+</html>
